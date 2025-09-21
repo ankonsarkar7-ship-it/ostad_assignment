@@ -1,0 +1,149 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("Course Cards UI"),
+          backgroundColor: Colors.blueGrey,
+        ),
+        body: const CourseGrid(),
+      ),
+    );
+  }
+}
+
+class CourseGrid extends StatelessWidget {
+  const CourseGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: GridView.count(
+        crossAxisCount: 2, // প্রতি row তে ২টা কার্ড
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 0.75, // height-width ratio
+        children: const [
+          CourseCard(
+            imageUrl: "https://i.ibb.co/8g9y2Xv/mern.jpg",
+            title: "Full Stack Web Development with JavaScript (MERN)",
+            tags: ["ব্যাচ ১৯", "৬০ সিট বাকি", "৬ দিন বাকি"],
+          ),
+          CourseCard(
+            imageUrl: "https://i.ibb.co/s9LtQ1D/django.jpg",
+            title: "Full Stack Web Development with Python, Django & React",
+            tags: ["ব্যাচ ৮", "৮৬ সিট বাকি", "৪০ দিন বাকি"],
+          ),
+          CourseCard(
+            imageUrl: "https://i.ibb.co/4RwzVf6/aspnet.jpg",
+            title: "Full Stack Web Development with ASP.Net Core",
+            tags: ["ব্যাচ ৭", "৭৫ সিট বাকি", "৫০ দিন বাকি"],
+          ),
+          CourseCard(
+            imageUrl: "https://i.ibb.co/5RQYwgn/sqa.jpg",
+            title: "SQA: Manual & Automated Testing",
+            tags: ["ব্যাচ ১৩", "৫৫ সিট বাকি", "৪৯ দিন বাকি"],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CourseCard extends StatelessWidget {
+  final String imageUrl;
+  final String title;
+  final List<String> tags;
+
+  const CourseCard({
+    super.key,
+    required this.imageUrl,
+    required this.title,
+    required this.tags,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 4,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Image section
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
+            child: Image.network(
+              imageUrl,
+              height: 120,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+
+          // Tags Row
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Wrap(
+              spacing: 6,
+              children: tags
+                  .map((tag) => Chip(
+                        label: Text(
+                          tag,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        backgroundColor: Colors.grey[200],
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                      ))
+                  .toList(),
+            ),
+          ),
+
+          // Title
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ),
+
+          const Spacer(),
+
+          // Button
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(40),
+                backgroundColor: Colors.blueGrey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text("বিস্তারিত দেখুন →"),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
