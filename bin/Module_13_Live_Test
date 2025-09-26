@@ -1,122 +1,83 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(ContactApp());
+  runApp(ContactListApp());
 }
 
-class ContactApp extends StatelessWidget {
+class ContactListApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ContactListPage(),
+      home: ContactListScreen(),
     );
   }
 }
 
-class ContactListPage extends StatefulWidget {
-  @override
-  _ContactListPageState createState() => _ContactListPageState();
-}
-
-class _ContactListPageState extends State<ContactListPage> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController numberController = TextEditingController();
-
-  List<Map<String, String>> contacts = [];
-
-  void addContact() {
-    if (nameController.text.isNotEmpty && numberController.text.isNotEmpty) {
-      setState(() {
-        contacts.add({
-          'name': nameController.text,
-          'number': numberController.text,
-        });
-        nameController.clear();
-        numberController.clear();
-      });
-    }
-  }
-
-  void deleteContact(int index) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text("Confirmation"),
-        content: Text("Are you sure you want to delete?"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-            child: Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                contacts.removeAt(index);
-              });
-              Navigator.of(ctx).pop();
-            },
-            child: Text("Delete", style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    );
-  }
+class ContactListScreen extends StatelessWidget {
+  final List<Map<String, String>> contacts = [
+    {"name": "Jawad", "phone": "01877-777777"},
+    {"name": "Ferdous", "phone": "01677-777777"},
+    {"name": "Hasan", "phone": "01745-777777"},
+    {"name": "Hasan", "phone": "01745-777777"},
+    {"name": "Hasan", "phone": "01745-777777"},
+    {"name": "Hasan", "phone": "01745-777777"},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Contact List"),
+        centerTitle: true,
         backgroundColor: Colors.blueGrey,
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            TextField(
-              controller: nameController,
+            TextFormField(
               decoration: InputDecoration(
-                labelText: "Name",
                 border: OutlineInputBorder(),
+                labelText: "Name",
               ),
             ),
             SizedBox(height: 10),
-            TextField(
-              controller: numberController,
-              keyboardType: TextInputType.phone,
+            TextFormField(
               decoration: InputDecoration(
-                labelText: "Number",
                 border: OutlineInputBorder(),
+                labelText: "Phone Number",
               ),
+              keyboardType: TextInputType.phone,
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: addContact,
+              onPressed: () {},
               style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 45),
                 backgroundColor: Colors.blueGrey,
               ),
               child: Text("Add"),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             Expanded(
               child: ListView.builder(
                 itemCount: contacts.length,
-                itemBuilder: (ctx, index) {
-                  return GestureDetector(
-                    onLongPress: () => deleteContact(index),
+                itemBuilder: (context, index) {
+                  return Card(
                     child: ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text(contacts[index]['name']!),
-                      subtitle: Text(contacts[index]['number']!),
+                      leading: Icon(Icons.person, color: Colors.brown),
+                      title: Text(
+                        contacts[index]["name"]!,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      subtitle: Text(contacts[index]["phone"]!),
                       trailing: Icon(Icons.call, color: Colors.blue),
                     ),
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
